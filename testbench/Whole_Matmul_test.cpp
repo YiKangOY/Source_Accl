@@ -36,33 +36,30 @@ InitMatrices:
         }
     }
 
-SendToStream:
+
+WriteToStream:
+    hls::stream<Data_t> Astream;
+    hls::stream<Data_t> Bstream;
+    hls::stream<Data_t> Cstream;
+    
     for(int i = 0; i < Mat_SizeM; i++){
         for(int j = 0; j < Mat_SizeK; j++){
-            LocalA.mat[i][j] = A[i][j];
+            Astream.write(A[i][j]);
         }
     }
 
     for(int i = 0; i < Mat_SizeK; i++){
         for(int j = 0; j < Mat_SizeN; j++){
-            LocalB.mat[i][j] = B[i][j];
+            Bstream.write(B[i][j]);
         }
     }
-
-WriteToStream:
-    hls::stream<Mat_A_t> Astream;
-    hls::stream<Mat_B_t> Bstream;
-    hls::stream<Mat_C_t> Cstream;
-    Astream.write(LocalA);
-    Bstream.write(LocalB);
 Calculate:
     Whole_Mat_mul(Astream, Bstream, Cstream);
 
 ReadOut:
-    Cstream.read(LocalC);
     for(int i = 0; i < Mat_SizeM; i++){
         for(int j = 0; j < Mat_SizeN; j++){
-            mat_hw[i][j] = LocalC.mat[i][j];
+            Cstream.read(mat_hw[i][j]);
         }
     }
 

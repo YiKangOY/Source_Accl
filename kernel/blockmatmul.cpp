@@ -1,4 +1,5 @@
 #include "../includes/mm_mult.h"
+#include "../includes/Streamfunction.h"
 void Blockmatmul(hls::stream<Block_vec_K>& Arows, hls::stream<Block_vec_K>& Bcols,
                     Block_mat& ABpartial){
     #pragma HLS DATAFLOW
@@ -14,6 +15,7 @@ void Blockmatmul(hls::stream<Block_vec_K>& Arows, hls::stream<Block_vec_K>& Bcol
     
     //Read Block_Size_Row rows of A
     LoadA:
+    
     for(int i = 0; i < Block_Size_M; i++){
         #pragma HLS PIPELINE II = 1
         Block_vec_K tempA = Arows.read();
@@ -27,6 +29,7 @@ void Blockmatmul(hls::stream<Block_vec_K>& Arows, hls::stream<Block_vec_K>& Bcol
 
     //Read Block_Size_Row cols of B
     LoadB:
+    
     for(int i = 0; i < Block_Size_N; i++){
         #pragma HLS PIPELINE II = 1
         Block_vec_K tempB = Bcols.read();
