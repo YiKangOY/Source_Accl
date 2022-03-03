@@ -1,0 +1,91 @@
+#include "../includes/mm_mult.h"
+#include "../includes/Matmul.h"
+#include <stdlib.h>
+using namespace std;
+
+void Matmul_sw(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeN], Data_t out[Mat_SizeM][Mat_SizeN]){
+    Data_t sum = 0;
+    for (int i = 0; i < Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            sum = 0;
+            for(int k = 0; k < Mat_SizeK; k++){
+                sum = sum + A[i][k] * B[k][j];
+            }
+            out[i][j] = sum;
+        }
+    }
+}
+
+int main(){
+    int fail = 0;
+    Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeN];
+    Data_t mat_sw[Mat_SizeM][Mat_SizeN], mat_hw[Mat_SizeM][Mat_SizeN];
+
+    Mat_A_t LocalA; Mat_B_t LocalB; Mat_C_t LocalC;
+
+    
+InitMatrices:
+    for (int i = 0; i< Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            mat_sw[i][j] = 0;
+            mat_hw[i][j] = 0;
+            for(int k = 0; k < Mat_SizeK; k++){
+                A[i][k] = rand() % 10;
+                B[k][j] = rand() % 10;
+            }
+        }
+    }
+
+SendToStream:
+    for(int i = 0; i < Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeK; j++){
+            LocalA.mat[i][j] = A[i][j];
+        }
+    }
+
+    for(int i = 0; i < Mat_SizeK; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            LocalB.mat[i][j] = B[i][j];
+        }
+    }
+
+WriteToStream:
+    hls::stream<Mat_A_t> Astream;
+    hls::stream<Mat_B_t> Bstream;
+    hls::stream<Mat_C_t> Cstream;
+    Astream.write(LocalA);
+    Bstream.write(LocalB);
+Calculate:
+    Whole_Mat_mul(Astream, Bstream, Cstream);
+
+ReadOut:
+    Cstream.read(LocalC);
+    for(int i = 0; i < Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            mat_hw[i][j] = LocalC.mat[i][j];
+        }
+    }
+
+Compare:
+    Matmul_sw(A, B, mat_sw);
+
+    for(int i = 0; i < Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            if(mat_hw[i][j] != mat_sw[i][j]) {
+                fail = 1;
+                cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
+                cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
+            }
+        }
+    }
+
+    if(fail == 1){
+        cout<<"Failed"<<endl;
+        return -1;
+    }
+    else{
+        cout<<"Passed"<<endl;
+    }
+    return 0;
+
+}
