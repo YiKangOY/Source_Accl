@@ -30,8 +30,8 @@ InitMatrices:
             mat_sw[i][j] = 0;
             mat_hw[i][j] = 0;
             for(int k = 0; k < Mat_SizeK; k++){
-                A[i][k] = rand() % 10;
-                B[k][j] = rand() % 10;
+                A[i][k] = i % 10;
+                B[k][j] = j % 10;
             }
         }
     }
@@ -54,7 +54,7 @@ WriteToStream:
         }
     }
 Calculate:
-    Whole_Mat_mul(Astream, Bstream, Cstream);
+    Matmul(Astream, Bstream, Cstream);
 
 ReadOut:
     for(int i = 0; i < Mat_SizeM; i++){
@@ -70,15 +70,15 @@ Compare:
         for(int j = 0; j < Mat_SizeN; j++){
             if(mat_hw[i][j] != mat_sw[i][j]) {
                 fail = 1;
-                cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
-                cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
+                //cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
+                //cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
             }
         }
     }
 
     if(fail == 1){
         cout<<"Failed"<<endl;
-        return -1;
+        return 1;
     }
     else{
         cout<<"Passed"<<endl;
