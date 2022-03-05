@@ -18,7 +18,7 @@ typedef struct {Data_t mat[Mat_SizeM][Mat_SizeK];} Mat_A_t;
 typedef struct {Data_t mat[Mat_SizeK][Mat_SizeN];} Mat_B_t;
 typedef struct {Data_t mat[Mat_SizeM][Mat_SizeN];} Mat_C_t;
 
-void Matmul(hls::stream<Data_t> & A, hls::stream<Data_t> & B, hls::stream<Data_t> & C);
+void Matmul(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeN], Data_t C[Mat_SizeM][Mat_SizeN]);
 
 
 #endif

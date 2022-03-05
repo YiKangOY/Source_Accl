@@ -14,8 +14,8 @@ const int Mat_SizeN = 64;
 
 //Blocksize follows M*K x K*N = M * N scheme
 const int Block_Size_M = 2;
-const int Block_Size_K = 8;
-const int Block_Size_N = 4;
+const int Block_Size_K = 16;
+const int Block_Size_N = 8;
 
 
 typedef struct {Data_t vec[Block_Size_M];} Block_vec_M;

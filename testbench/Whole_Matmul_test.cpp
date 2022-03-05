@@ -30,19 +30,19 @@ InitMatrices:
             mat_sw[i][j] = 0;
             mat_hw[i][j] = 0;
             for(int k = 0; k < Mat_SizeK; k++){
-                A[i][k] = i % 10;
-                B[k][j] = j % 10;
+                A[i][k] = rand() % 10;
+                B[k][j] = rand() % 10;
             }
         }
     }
 
 
-WriteToStream:
+/* WriteToStream:
     hls::stream<Data_t> Astream;
     hls::stream<Data_t> Bstream;
-    hls::stream<Data_t> Cstream;
+    hls::stream<Data_t> Cstream; */
     
-    for(int i = 0; i < Mat_SizeM; i++){
+/*     for(int i = 0; i < Mat_SizeM; i++){
         for(int j = 0; j < Mat_SizeK; j++){
             Astream.write(A[i][j]);
         }
@@ -52,16 +52,16 @@ WriteToStream:
         for(int j = 0; j < Mat_SizeN; j++){
             Bstream.write(B[i][j]);
         }
-    }
+    } */
 Calculate:
-    Matmul(Astream, Bstream, Cstream);
+    Matmul(A, B, mat_hw);
 
-ReadOut:
+/* ReadOut:
     for(int i = 0; i < Mat_SizeM; i++){
         for(int j = 0; j < Mat_SizeN; j++){
             Cstream.read(mat_hw[i][j]);
         }
-    }
+    } */
 
 Compare:
     Matmul_sw(A, B, mat_sw);
@@ -70,8 +70,8 @@ Compare:
         for(int j = 0; j < Mat_SizeN; j++){
             if(mat_hw[i][j] != mat_sw[i][j]) {
                 fail = 1;
-                //cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
-                //cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
+                cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
+                cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
             }
         }
     }

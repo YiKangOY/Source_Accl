@@ -1,36 +1,48 @@
 #include "../includes/Matmul.h"
 #include "../includes/mm_mult.h"
-void Matmul(hls::stream<Data_t> & A, hls::stream<Data_t> & B, hls::stream<Data_t> & C){
+#include <iostream>
+using namespace std;
+void Matmul(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeN], Data_t C[Mat_SizeM][Mat_SizeN]){
+
     //Local variables
-    Mat_A_t LocalA_stream; Mat_B_t LocalB_stream; Mat_C_t LocalC_stream;
     Data_t LocalA[Mat_SizeM][Mat_SizeK], LocalB[Mat_SizeK][Mat_SizeN], LocalC[Mat_SizeM][Mat_SizeN];
 
     Data_t Block_out[Block_Size_M][Block_Size_N];
 
     //Local stream variable to matrix
-    #pragma HLS ARRAY_PARTITION variable = LocalA dim = 2 complete
-    for(int i = 0; i < Mat_SizeM; i++){
-    //#pragma HLS PIPELINE II = 1
-        for(int j = 0; j < Mat_SizeK; j++){
-            LocalA[i][j] = A.read();
-        }
-    }
-
+    #pragma HLS ARRAY_PARTITION variable = LocalA dim = 1 complete
     #pragma HLS ARRAY_PARTITION variable = LocalB dim = 2 complete
+    #pragma HLS ARRAY_PARTITION variable = LocalC dim = 0 complete
+
+    //std::cout<<*A<<std::endl;
+
+    //Read to local
     for(int i = 0; i < Mat_SizeK; i++){
-    //#pragma HLS PIPELINE II = 1
-        for(int j = 0; j < Mat_SizeN; j++){
-            LocalB[i][j] = B.read();
+        for(int j = 0; j < Mat_SizeM; j++){
+            LocalA[j][i] = A[j][i];
         }
     }
 
+    for(int i = 0; i < Mat_SizeK; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            LocalB[i][j] = B[i][j];
+        }
+    }
+
+    for(int i = 0; i < Mat_SizeM; i++){
+        for(int j = 0; j < Mat_SizeN; j++){
+            LocalC[i][j] = 0;
+        }
+    }
 
     //Call systolic array in a tiled shceme
     LpC_it1:
     for(int it1 = 0; it1 < Mat_SizeM; it1 = it1 + Block_Size_M){
+        //@todo: add it later, may cause syth slow #pragma HLS UNROLL
         #pragma HLS PIPELINE off
     	LpC_it2:
         for(int it2 = 0; it2 < Mat_SizeN; it2 = it2 + Block_Size_N){
+        //@todo: add it later, may cause syth slow #pragma HLS UNROLL
             //it1 and it2 are used to locate target output in C matrix
             #pragma HLS PIPELINE off
         	LpC_loc:
@@ -42,11 +54,11 @@ void Matmul(hls::stream<Data_t> & A, hls::stream<Data_t> & B, hls::stream<Data_t
 
                 //Feed A to systolic array
                 Data_t TempA [Block_Size_M][Block_Size_K];
-                #pragma HLS ARRAY_PARTITION variable = TempA dim = 2 complete
+                #pragma HLS ARRAY_PARTITION variable = TempA dim = 1 complete
             	FeedA1:
-                for(int row = 0; row < Block_Size_M; row++){
+                for(int col = 0; col < Block_Size_K; col++){
                 	FeedA2:
-                    for(int col = 0; col < Block_Size_K; col++){
+                    for(int row = 0; row < Block_Size_M; row++){
                         TempA[row][col] = LocalA[it1 + row][col + loc];
                     }
                 }
@@ -77,15 +89,13 @@ void Matmul(hls::stream<Data_t> & A, hls::stream<Data_t> & B, hls::stream<Data_t
     }
     //Systolic array finish
 
-    #pragma HLS ARRAY_PARTITION variable = LocalC dim = 0 complete
-    Wout1:
+    //#pragma HLS ARRAY_PARTITION variable = LocalC dim = 0 complete
+     Wout1:
     for(int i = 0; i < Mat_SizeM; i++){
     	Wout2:
         for(int j = 0; j < Mat_SizeN; j++){
-            C.write(LocalC[i][j]);
+            C[i][j] = LocalC[i][j];
         }
     }
-
-
 
 }
