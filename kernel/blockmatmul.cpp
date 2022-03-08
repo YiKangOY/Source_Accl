@@ -1,5 +1,4 @@
 #include "../includes/mm_mult.h"
-#include "../includes/Streamfunction.h"
 void Blockmatmul(Data_t A[Block_Size_M][Block_Size_K], Data_t B[Block_Size_K][Block_Size_N],
                     Data_t ABpartial[Block_Size_M][Block_Size_N]){
 	//#pragma HLS INLINE off
