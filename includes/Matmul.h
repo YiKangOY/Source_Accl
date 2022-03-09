@@ -7,16 +7,10 @@
 #include "mm_mult.h"
 using namespace std;
 
+const int Mat_SizeM = 16;        
+const int Mat_SizeK = 512;
+const int Mat_SizeN = 16;
 
-
-
-typedef struct {Data_t vec[Mat_SizeM];} Mat_vec_Row;
-typedef struct {Data_t vec[Mat_SizeK];} Mat_vec_Col;
-
-
-typedef struct {Data_t mat[Mat_SizeM][Mat_SizeK];} Mat_A_t;
-typedef struct {Data_t mat[Mat_SizeK][Mat_SizeM];} Mat_B_t;
-typedef struct {Data_t mat[Mat_SizeM][Mat_SizeM];} Mat_C_t;
 
 void Wrapper(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t C[Mat_SizeM][Mat_SizeM]);
 
@@ -32,9 +26,6 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
     #pragma HLS ARRAY_PARTITION variable = LocalA dim = 1 complete
     #pragma HLS ARRAY_PARTITION variable = LocalB dim = 2 complete
     #pragma HLS ARRAY_PARTITION variable = LocalC dim = 0 complete
-
-    //std::cout<<*A<<std::endl;
-
     //Read to local
     for(int i = 0; i < m2; i++){
         for(int j = 0; j < m1; j++){

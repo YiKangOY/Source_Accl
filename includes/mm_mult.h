@@ -7,10 +7,8 @@
 using namespace std;
 
 ////It performs M*K x K*M = M * M scheme.
-typedef int8_t Data_t;
-const int Mat_SizeM = 16;        
-const int Mat_SizeK = 512;
-const int Mat_SizeN = 16;
+typedef float Data_t;
+
 
 
 //Blocksize follows M*K x K*M = M * M scheme

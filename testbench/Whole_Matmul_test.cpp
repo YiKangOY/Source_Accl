@@ -21,7 +21,8 @@ int main(){
     Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeM];
     Data_t mat_sw[Mat_SizeM][Mat_SizeM], mat_hw[Mat_SizeM][Mat_SizeM];
 
-    Mat_A_t LocalA; Mat_B_t LocalB; Mat_C_t LocalC;
+    
+
 
     
 InitMatrices:
