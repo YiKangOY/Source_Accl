@@ -11,14 +11,14 @@ void KQ_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
     Data_t KQ_Out0[Mat_SizeM][Mat_SizeM], KQ_Out1[Mat_SizeM][Mat_SizeM], KQ_Out2[Mat_SizeM][Mat_SizeM], KQ_Out3[Mat_SizeM][Mat_SizeM], KQ_Out4[Mat_SizeM][Mat_SizeM],
             KQ_Out5[Mat_SizeM][Mat_SizeM], KQ_Out6[Mat_SizeM][Mat_SizeM], KQ_Out7[Mat_SizeM][Mat_SizeM];
     //Multiply K and Q
-    Matmul(Q, K0, KQ_Out0);
-    Matmul(Q, K1, KQ_Out1);
-    Matmul(Q, K2, KQ_Out2);
-    Matmul(Q, K3, KQ_Out3);
-    Matmul(Q, K4, KQ_Out4);
-    Matmul(Q, K5, KQ_Out5);
-    Matmul(Q, K6, KQ_Out6);
-    Matmul(Q, K7, KQ_Out7);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K0, KQ_Out0);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K1, KQ_Out1);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K2, KQ_Out2);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K3, KQ_Out3);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K4, KQ_Out4);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K5, KQ_Out5);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K6, KQ_Out6);
+    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K>(Q, K7, KQ_Out7);
 
     Data_t SF_Out0[Mat_SizeM][Mat_SizeM], SF_Out1[Mat_SizeM][Mat_SizeM], SF_Out2[Mat_SizeM][Mat_SizeM], SF_Out3[Mat_SizeM][Mat_SizeM], SF_Out4[Mat_SizeM][Mat_SizeM],
             SF_Out5[Mat_SizeM][Mat_SizeM], SF_Out6[Mat_SizeM][Mat_SizeM], SF_Out7[Mat_SizeM][Mat_SizeM];
@@ -33,11 +33,10 @@ void KQ_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
     Softmax(KQ_Out7,SF_Out7);
 
     //Multiply Value
-        
+    
 
     //Merge data
-    Data_t Out[Mat_SizeM * 8][Mat_SizeM];
-    MergeMat(SF_Out0, SF_Out1, SF_Out2, SF_Out3, SF_Out4, SF_Out5, SF_Out6, SF_Out7, Out);
+
 
 
 

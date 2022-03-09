@@ -30,8 +30,8 @@ InitMatrices:
             mat_sw[i][j] = 0;
             mat_hw[i][j] = 0;
             for(int k = 0; k < Mat_SizeK; k++){
-                A[i][k] = rand() % 10;
-                B[k][j] = rand() % 10;
+                A[i][k] = (Data_t)(rand() % 3);
+                B[k][j] = (Data_t)(rand() % 3);
             }
         }
     }

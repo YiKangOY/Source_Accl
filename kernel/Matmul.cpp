@@ -104,5 +104,5 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
  */
 
 void Wrapper(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t C[Mat_SizeM][Mat_SizeM]){
-    Matmul<Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_K> (A, B, C);
+    Matmul<Mat_SizeM, Mat_SizeK, Mat_SizeN, Block_Size_M, Block_Size_K, Block_Size_N> (A, B, C);
 }

@@ -20,13 +20,13 @@ typedef struct {Data_t mat[Mat_SizeM][Mat_SizeM];} Mat_C_t;
 
 void Wrapper(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t C[Mat_SizeM][Mat_SizeM]);
 
-template<int m1, int m2, int b1, int b2>
-void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
+template<int m1, int m2, int m3, int b1, int b2, int b3>
+void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
 
     //Local variables
-    Data_t LocalA[m1][m2], LocalB[m2][m1], LocalC[m1][m1];
+    Data_t LocalA[m1][m2], LocalB[m2][m3], LocalC[m1][m3];
 
-    Data_t Block_out[b1][b1];
+    Data_t Block_out[b1][b3];
 
     
     #pragma HLS ARRAY_PARTITION variable = LocalA dim = 1 complete
@@ -43,13 +43,13 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
     }
 
     for(int i = 0; i < m2; i++){
-        for(int j = 0; j < m1; j++){
+        for(int j = 0; j < m3; j++){
             LocalB[i][j] = B[i][j];
         }
     }
 
     for(int i = 0; i < m1; i++){
-        for(int j = 0; j < m1; j++){
+        for(int j = 0; j < m3; j++){
             LocalC[i][j] = 0;
         }
     }
@@ -60,7 +60,7 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
         //@todo: add it later, may cause syth slow #pragma HLS UNROLL
         #pragma HLS PIPELINE off
     	LpC_it2:
-        for(int it2 = 0; it2 < m1; it2 = it2 + b1){
+        for(int it2 = 0; it2 < m3; it2 = it2 + b3){
         //@todo: add it later, may cause syth slow #pragma HLS UNROLL
             //it1 and it2 are used to locate target output in C matrix
             #pragma HLS PIPELINE off
@@ -83,23 +83,23 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
                 }
 
                 //Feed B to systolic array
-                Data_t TempB [b2][b1];
+                Data_t TempB [b2][b3];
                 #pragma HLS ARRAY_PARTITION variable = TempB dim = 1 complete
                 FeedB1:
                 for(int row = 0; row < b2; row++){
                 	FeedB2:
-                    for(int col = 0; col < b1; col++){
+                    for(int col = 0; col < b3; col++){
                         TempB[row][col] = LocalB[row + loc][it2 + col];
                     }
 
                 }
 
-                Blockmatmul<b1, b2>(TempA, TempB, Block_out);
+                Blockmatmul<b1, b2, b3>(TempA, TempB, Block_out);
 
                 PS1:
                 for(int i = 0; i < b1; i++){
                 	PS2:
-                    for(int j = 0; j < b1; j++){
+                    for(int j = 0; j < b3; j++){
                         LocalC[it1 + i][it2 + j] += Block_out[i][j];
                     }
                 }
@@ -108,11 +108,10 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m1], Data_t C[m1][m1]){
     }
     //Systolic array finish
 
-    //#pragma HLS ARRAY_PARTITION variable = LocalC dim = 0 complete
-     Wout1:
+    Wout1:
     for(int i = 0; i < m1; i++){
     	Wout2:
-        for(int j = 0; j < m1; j++){
+        for(int j = 0; j < m3; j++){
             C[i][j] = LocalC[i][j];
         }
     }
