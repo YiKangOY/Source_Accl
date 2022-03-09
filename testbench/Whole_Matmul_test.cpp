@@ -37,31 +37,11 @@ InitMatrices:
     }
 
 
-/* WriteToStream:
-    hls::stream<Data_t> Astream;
-    hls::stream<Data_t> Bstream;
-    hls::stream<Data_t> Cstream; */
-    
-/*     for(int i = 0; i < Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeK; j++){
-            Astream.write(A[i][j]);
-        }
-    }
 
-    for(int i = 0; i < Mat_SizeK; i++){
-        for(int j = 0; j < Mat_SizeM; j++){
-            Bstream.write(B[i][j]);
-        }
-    } */
 Calculate:
-    Matmul(A, B, mat_hw);
+    Wrapper(A, B, mat_hw);
 
-/* ReadOut:
-    for(int i = 0; i < Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeM; j++){
-            Cstream.read(mat_hw[i][j]);
-        }
-    } */
+
 
 Compare:
     Matmul_sw(A, B, mat_sw);
