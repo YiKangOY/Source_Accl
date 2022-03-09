@@ -1,14 +1,13 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
 #include "../includes/KQV.h"
-void KQ_Mul(Data_t Q[Mat_SizeM][Mat_SizeK], 
+void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK], 
             Data_t K0[Mat_SizeK][Mat_SizeM], Data_t K1[Mat_SizeK][Mat_SizeM], Data_t K2[Mat_SizeK][Mat_SizeM], Data_t K3[Mat_SizeK][Mat_SizeM],
             Data_t K4[Mat_SizeK][Mat_SizeM], Data_t K5[Mat_SizeK][Mat_SizeM], Data_t K6[Mat_SizeK][Mat_SizeM], Data_t K7[Mat_SizeK][Mat_SizeM],
             Data_t V0[Mat_SizeM][Mat_SizeK], Data_t V1[Mat_SizeM][Mat_SizeK], Data_t V2[Mat_SizeM][Mat_SizeK], Data_t V3[Mat_SizeM][Mat_SizeK],
             Data_t V4[Mat_SizeM][Mat_SizeK], Data_t V5[Mat_SizeM][Mat_SizeK], Data_t V6[Mat_SizeM][Mat_SizeK], Data_t V7[Mat_SizeM][Mat_SizeK],
             Data_t Z0[Mat_SizeM][Mat_SizeK], Data_t Z1[Mat_SizeM][Mat_SizeK], Data_t Z2[Mat_SizeM][Mat_SizeK], Data_t Z3[Mat_SizeM][Mat_SizeK], 
-            Data_t Z4[Mat_SizeM][Mat_SizeK], Data_t Z5[Mat_SizeM][Mat_SizeK], Data_t Z6[Mat_SizeM][Mat_SizeK], Data_t Z7[Mat_SizeM][Mat_SizeK]
-            )
+            Data_t Z4[Mat_SizeM][Mat_SizeK], Data_t Z5[Mat_SizeM][Mat_SizeK], Data_t Z6[Mat_SizeM][Mat_SizeK], Data_t Z7[Mat_SizeM][Mat_SizeK])
 {
         //K0-K7 actually are K transpose
         Data_t KQ_Out0[Mat_SizeM][Mat_SizeM], KQ_Out1[Mat_SizeM][Mat_SizeM], KQ_Out2[Mat_SizeM][Mat_SizeM], KQ_Out3[Mat_SizeM][Mat_SizeM], KQ_Out4[Mat_SizeM][Mat_SizeM],
@@ -36,8 +35,6 @@ void KQ_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
         Softmax_sw(KQ_Out7,SF_Out7);
 
         //Multiply Value
-        Data_t Z0[Mat_SizeM][Mat_SizeK], Z1[Mat_SizeM][Mat_SizeK], Z2[Mat_SizeM][Mat_SizeK], Z3[Mat_SizeM][Mat_SizeK], Z4[Mat_SizeM][Mat_SizeK],
-        Z5[Mat_SizeM][Mat_SizeK], Z6[Mat_SizeM][Mat_SizeK], Z7[Mat_SizeM][Mat_SizeK];
 
         Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(SF_Out0, V0, Z0);
         Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(SF_Out1, V1, Z1);
