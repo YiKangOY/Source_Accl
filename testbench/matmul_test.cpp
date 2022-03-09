@@ -2,10 +2,10 @@
 #include <stdlib.h>
 using namespace std;
 
-void Matmul_sw(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeN], Data_t out[Mat_SizeM][Mat_SizeN]){
+void Matmul_sw(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t out[Mat_SizeM][Mat_SizeM]){
     Data_t sum = 0;
     for (int i = 0; i < Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeN; j++){
+        for(int j = 0; j < Mat_SizeM; j++){
             sum = 0;
             for(int k = 0; k < Mat_SizeK; k++){
                 sum = sum + A[i][k] * B[k][j];
@@ -23,12 +23,12 @@ int main(){
     Block_vec_K strm_mat2_element;
     Block_mat block_out;
 
-    Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeN];
-    Data_t mat_sw[Mat_SizeM][Mat_SizeN], mat_hw[Mat_SizeM][Mat_SizeN];
+    Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeM];
+    Data_t mat_sw[Mat_SizeM][Mat_SizeM], mat_hw[Mat_SizeM][Mat_SizeM];
     //cout<<Mat_SizeM<<"    "<<Block_Size_Row<<endl;
 InitMatrices:
     for (int i = 0; i< Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeN; j++){
+        for(int j = 0; j < Mat_SizeM; j++){
             mat_sw[i][j] = 0;
             mat_hw[i][j] = 0;
             for(int k = 0; k < Mat_SizeK; k++){
@@ -38,7 +38,7 @@ InitMatrices:
         }
     }
     for (int it1 = 0; it1 < Mat_SizeM; it1 = it1 + Block_Size_M){
-        for(int it2 = 0; it2< Mat_SizeN; it2 = it2 + Block_Size_N){
+        for(int it2 = 0; it2< Mat_SizeM; it2 = it2 + Block_Size_M){
             for(int loc = 0; loc < Mat_SizeK; loc = loc + Block_Size_K){
 
                 //readA
@@ -50,7 +50,7 @@ InitMatrices:
                 }
 
                 //readB
-                for(int col = 0; col <  Block_Size_N; col = col + 1){
+                for(int col = 0; col <  Block_Size_M; col = col + 1){
                     for(int row = 0; row <  Block_Size_K; row = row + 1){
                         strm_mat2_element.vec[row] = B[row + loc][it2 + col];
                     }
@@ -62,7 +62,7 @@ InitMatrices:
 
 
                 for(int i = 0; i<Block_Size_M; i++){
-                    for(int j = 0; j<Block_Size_N; j++){
+                    for(int j = 0; j<Block_Size_M; j++){
                         mat_hw[it1+i][it2+j] += block_out.mat[i][j];
                     }   
                 }
@@ -73,7 +73,7 @@ InitMatrices:
     }
 /*	
 	for (int i = 0; i < Mat_SizeM; i++){
-		for (int j = 0; j < Mat_SizeN; j++){
+		for (int j = 0; j < Mat_SizeM; j++){
 			cout << mat_hw[i][j] << " ";
 		}
 		cout << endl;
@@ -83,7 +83,7 @@ InitMatrices:
     Matmul_sw(A, B, mat_sw);
 /*
 	for (int i = 0; i < Mat_SizeM; i++){
-		for (int j = 0; j < Mat_SizeN; j++){
+		for (int j = 0; j < Mat_SizeM; j++){
 			cout << mat_sw[i][j] << " ";
 		}
 		cout << endl;
@@ -91,7 +91,7 @@ InitMatrices:
 */
 
     for(int i = 0; i < Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeN; j++){
+        for(int j = 0; j < Mat_SizeM; j++){
             if(mat_hw[i][j] != mat_sw[i][j]) {
                 fail = 1;
                 cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;

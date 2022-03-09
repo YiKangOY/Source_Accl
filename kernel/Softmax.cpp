@@ -2,7 +2,7 @@
 #include "../includes/Matmul.h"
 #include "hls_math.h"
 
-void Softmax(Data_t KQ_Out[Mat_SizeM][Mat_SizeN], Data_t Soft_Out[Mat_SizeM][Mat_SizeN]){
+void Softmax(Data_t KQ_Out[Mat_SizeM][Mat_SizeM], Data_t Soft_Out[Mat_SizeM][Mat_SizeM]){
     Data_t ExpSum[Block_Size_M];
     for(int i = 0; i < Mat_SizeM; i++){
         for(int j = 0; j < Mat_SizeK; j++){

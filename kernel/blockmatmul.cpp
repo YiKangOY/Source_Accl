@@ -1,6 +1,6 @@
 #include "../includes/mm_mult.h"
-void Blockmatmul(Data_t A[Block_Size_M][Block_Size_K], Data_t B[Block_Size_K][Block_Size_N],
-                    Data_t ABpartial[Block_Size_M][Block_Size_N]){
+void Blockmatmul(Data_t A[Block_Size_M][Block_Size_K], Data_t B[Block_Size_K][Block_Size_M],
+                    Data_t ABpartial[Block_Size_M][Block_Size_M]){
 	//#pragma HLS INLINE off
 
 
@@ -17,12 +17,12 @@ void Blockmatmul(Data_t A[Block_Size_M][Block_Size_K], Data_t B[Block_Size_K][Bl
         for(int i = 0; i< Block_Size_M; i++){
             #pragma HLS UNROLL
             Sys3:
-            for(int j = 0; j < Block_Size_N; j++){
+            for(int j = 0; j < Block_Size_M; j++){
                 #pragma HLS UNROLL
                 int last = (k == 0) ? 0 : ABpartial[i][j];
 
                 int a_val = (i < Block_Size_M && k < Block_Size_K) ? A[i][k] : 0;
-                int b_val = (k < Block_Size_K && j < Block_Size_N) ? B[k][j] : 0;
+                int b_val = (k < Block_Size_K && j < Block_Size_M) ? B[k][j] : 0;
                 ABpartial[i][j] = last + a_val * b_val;
             }
         }

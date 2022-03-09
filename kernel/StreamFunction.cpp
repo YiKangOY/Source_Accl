@@ -18,11 +18,11 @@ void LoadA_Block(hls::stream<Block_vec_K> & Arows, Data_t A[Block_Size_M][Block_
     }
 }
 
-void LoadB_Block(hls::stream<Block_vec_K> & Bcols, Data_t B[Block_Size_K][Block_Size_N]){
-    for(int i = 0; i < Block_Size_N; i++){
+void LoadB_Block(hls::stream<Block_vec_K> & Bcols, Data_t B[Block_Size_K][Block_Size_M]){
+    for(int i = 0; i < Block_Size_M; i++){
         #pragma HLS PIPELINE II = 1
         Block_vec_K tempB = Bcols.read();
-        //stream Bcols has "Mat_sizeN" elements, each represent a col in sub_matrix B
+        //stream Bcols has "Mat_SizeM" elements, each represent a col in sub_matrix B
         LoadB_Inner:
         for(int j = 0; j < Block_Size_K; j++){
             //Get one col in sub B
