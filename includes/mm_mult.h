@@ -8,7 +8,7 @@ using namespace std;
 
 ////It performs M*K x K*N = M * N scheme.
 typedef int16_t Data_t;
-const int Mat_SizeM = 64;        //num of wordvec being processed one time
+const int Mat_SizeM = 8;        //num of wordvec being processed one time
 const int Mat_SizeK = 512;
 const int Mat_SizeN = 64;
 
