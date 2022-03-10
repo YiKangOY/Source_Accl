@@ -22,7 +22,7 @@ template<int dim1, int dim2>
 void Init_mat(Data_t A[dim1][dim2]){
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            A[i][j] = (rand() % 10)/100;
+            A[i][j] = (Data_t) (rand() % 10) / 10;
         }
     }
 }
@@ -38,14 +38,18 @@ void Init_mat0(Data_t A[dim1][dim2]){
 
 template<int dim1, int dim2>
 int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
+    int fail = 0;
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            if(A[i][j] != B[i][j]){
-                return 255;
+        	Data_t a = A[i][j];
+        	Data_t b = B[i][j];
+            if(a != b){
+                cout<<"hw result: "<<a<<" sw result: "<<b<<endl;
+                fail = 1;
             }
         }
     }
-    return 0;
+    return fail;
 }
 int main(){
     int fail = 0;
@@ -60,6 +64,7 @@ int main(){
     Data_t Z4[Mat_SizeM][Mat_SizeK]; Data_t Z5[Mat_SizeM][Mat_SizeK]; Data_t Z6[Mat_SizeM][Mat_SizeK]; Data_t Z7[Mat_SizeM][Mat_SizeK];
 
     //Init Q V Z
+    Init_mat<Mat_SizeM, Mat_SizeK>(Query);
     Init_mat<Mat_SizeK, Mat_SizeM>(K0); Init_mat<Mat_SizeK, Mat_SizeM>(K1); Init_mat<Mat_SizeK, Mat_SizeM>(K2); Init_mat<Mat_SizeK, Mat_SizeM>(K3); 
     Init_mat<Mat_SizeK, Mat_SizeM>(K4); Init_mat<Mat_SizeK, Mat_SizeM>(K5); Init_mat<Mat_SizeK, Mat_SizeM>(K6); Init_mat<Mat_SizeK, Mat_SizeM>(K7); 
 
