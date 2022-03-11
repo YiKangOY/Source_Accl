@@ -7,9 +7,9 @@
 #include "mm_mult.h"
 using namespace std;
 
-const int Mat_SizeM = 16;        
-const int Mat_SizeK = 512;
-const int Mat_SizeN = 16;
+const int Mat_SizeM = 8;        
+const int Mat_SizeK = 256;
+const int Mat_SizeN = 8;
 
 
 void Wrapper(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t C[Mat_SizeM][Mat_SizeM]);
@@ -57,9 +57,6 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
             for(int loc = 0; loc < m2; loc = loc + b2){
 			#pragma HLS LOOP_FLATTEN off
             #pragma HLS PIPELINE off
-			
-                //Blocks in a row (one row has K cols, divide by b2)
-
                 //Feed A to systolic array
                 Data_t TempA [b1][b2];
                 #pragma HLS ARRAY_PARTITION variable = TempA dim = 1 complete

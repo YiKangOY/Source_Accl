@@ -2,7 +2,7 @@
 #include "../includes/Matmul.h"
 #include "../includes/KQV.h"
 #include "../includes/Softmax.h"
-void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK], 
+/* void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK], 
             Data_t K0[Mat_SizeK][Mat_SizeM], Data_t K1[Mat_SizeK][Mat_SizeM], Data_t K2[Mat_SizeK][Mat_SizeM], Data_t K3[Mat_SizeK][Mat_SizeM],
             Data_t K4[Mat_SizeK][Mat_SizeM], Data_t K5[Mat_SizeK][Mat_SizeM], Data_t K6[Mat_SizeK][Mat_SizeM], Data_t K7[Mat_SizeK][Mat_SizeM],
             Data_t V0[Mat_SizeM][Mat_SizeK], Data_t V1[Mat_SizeM][Mat_SizeK], Data_t V2[Mat_SizeM][Mat_SizeK], Data_t V3[Mat_SizeM][Mat_SizeK],
@@ -47,6 +47,7 @@ void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
         Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(SF_Out7, V7, Z7);
 
 }
+ */
 
 void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]){
         Matmul<Mat_SizeM, Mat_SizeK, Mat_SizeM, Block_Size_M, Block_Size_K, Block_Size_M>(Q, K, S);

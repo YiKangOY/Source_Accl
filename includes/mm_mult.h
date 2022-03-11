@@ -10,7 +10,7 @@ using namespace std;
 typedef float Data_t;
 //Blocksize follows M*K x K*M = M * M scheme
 const int Block_Size_M = 4;
-const int Block_Size_K = 16;
+const int Block_Size_K = 4;
 const int Block_Size_N = 4;
 
 
@@ -27,7 +27,7 @@ void Blockmatmul(Data_t A[b1][b2], Data_t B[b2][b3],
     //Partition in 1 dim so read one row (K elements) a time
     #pragma HLS ARRAY_PARTITION variable = B dim = 2 complete
     //Partition in 2 dim so read one column (K elements) a time
-    //#pragma HLS ARRAY_PARTITION variable = ABpartial dim = 0 complete
+    #pragma HLS ARRAY_PARTITION variable = ABpartial dim = 0 complete
 
     Sys1:
     for(int k = 0; k < b2; k++){
@@ -40,8 +40,10 @@ void Blockmatmul(Data_t A[b1][b2], Data_t B[b2][b3],
                 #pragma HLS UNROLL
                 Data_t last = (k == 0) ? 0 : ABpartial[i][j];
 
-                Data_t a_val = (i < b1 && k < b2) ? A[i][k] : 0;
-                Data_t b_val = (k < b2 && j < b3) ? B[k][j] : 0;
+/*                 Data_t a_val = (i < b1 && k < b2) ? A[i][k] : 0;
+                Data_t b_val = (k < b2 && j < b3) ? B[k][j] : 0; */
+                Data_t a_val = A[i][k];
+                Data_t b_val = B[k][j];
                 ABpartial[i][j] = last + a_val * b_val;
             }
         }

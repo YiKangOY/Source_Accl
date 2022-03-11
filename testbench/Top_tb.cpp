@@ -3,6 +3,7 @@
 #include "../includes/KQV.h"
 #include "../includes/Softmax.h"
 #include "../includes/Top.h"
+#include <ctime>
 #include <stdlib.h>
 using namespace std;
 
@@ -64,6 +65,7 @@ int main(){
 
     
     //Init matrices
+    srand((unsigned)time(NULL));
     Init_mat<Mat_SizeM, Mat_SizeK>(Query);
     Init_mat<Mat_SizeK, Mat_SizeM>(Key);
     Init_mat<Mat_SizeM, Mat_SizeK>(Value);

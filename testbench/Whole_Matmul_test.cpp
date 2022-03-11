@@ -1,6 +1,7 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
 #include <stdlib.h>
+#include <ctime>
 using namespace std;
 
 void Matmul_sw(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t out[Mat_SizeM][Mat_SizeM]){
@@ -20,7 +21,7 @@ int main(){
     int fail = 0;
     Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeM];
     Data_t mat_sw[Mat_SizeM][Mat_SizeM], mat_hw[Mat_SizeM][Mat_SizeM];
-
+    srand((unsigned)time(NULL));
     
 
 
