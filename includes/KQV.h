@@ -13,10 +13,14 @@ void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
             Data_t Z0[Mat_SizeM][Mat_SizeK], Data_t Z1[Mat_SizeM][Mat_SizeK], Data_t Z2[Mat_SizeM][Mat_SizeK], Data_t Z3[Mat_SizeM][Mat_SizeK], 
             Data_t Z4[Mat_SizeM][Mat_SizeK], Data_t Z5[Mat_SizeM][Mat_SizeK], Data_t Z6[Mat_SizeM][Mat_SizeK], Data_t Z7[Mat_SizeM][Mat_SizeK]);
 
-void Softmax_sw(Data_t KQ_Out[Mat_SizeM][Mat_SizeM], Data_t Soft_Out[Mat_SizeM][Mat_SizeM]);
-
-void MergeMat(Data_t SF_Out0[Mat_SizeM][Mat_SizeM], Data_t SF_Out1[Mat_SizeM][Mat_SizeM], Data_t SF_Out2[Mat_SizeM][Mat_SizeM], Data_t SF_Out3[Mat_SizeM][Mat_SizeM],
+/* void MergeMat(Data_t SF_Out0[Mat_SizeM][Mat_SizeM], Data_t SF_Out1[Mat_SizeM][Mat_SizeM], Data_t SF_Out2[Mat_SizeM][Mat_SizeM], Data_t SF_Out3[Mat_SizeM][Mat_SizeM],
             Data_t SF_Out4[Mat_SizeM][Mat_SizeM], Data_t SF_Out5[Mat_SizeM][Mat_SizeM], Data_t SF_Out6[Mat_SizeM][Mat_SizeM], Data_t SF_Out7[Mat_SizeM][Mat_SizeM], 
             Data_t Out[Mat_SizeM * 8][Mat_SizeM]);
+ */
 
+void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]);
+
+void Single_Softmax(Data_t S[Mat_SizeM][Mat_SizeM], Data_t S_Out[Mat_SizeM][Mat_SizeM]);
+
+void Single_V(Data_t S_Out[Mat_SizeM][Mat_SizeM], Data_t V[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]);
 #endif

@@ -1,6 +1,7 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
 #include "../includes/KQV.h"
+#include "../includes/Softmax.h"
 void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK], 
             Data_t K0[Mat_SizeK][Mat_SizeM], Data_t K1[Mat_SizeK][Mat_SizeM], Data_t K2[Mat_SizeK][Mat_SizeM], Data_t K3[Mat_SizeK][Mat_SizeM],
             Data_t K4[Mat_SizeK][Mat_SizeM], Data_t K5[Mat_SizeK][Mat_SizeM], Data_t K6[Mat_SizeK][Mat_SizeM], Data_t K7[Mat_SizeK][Mat_SizeM],
@@ -24,15 +25,15 @@ void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
 
         Data_t SF_Out0[Mat_SizeM][Mat_SizeM], SF_Out1[Mat_SizeM][Mat_SizeM], SF_Out2[Mat_SizeM][Mat_SizeM], SF_Out3[Mat_SizeM][Mat_SizeM], SF_Out4[Mat_SizeM][Mat_SizeM],
         SF_Out5[Mat_SizeM][Mat_SizeM], SF_Out6[Mat_SizeM][Mat_SizeM], SF_Out7[Mat_SizeM][Mat_SizeM];
-        //Softmax_sw
-        Softmax_sw(KQ_Out0,SF_Out0);
-        Softmax_sw(KQ_Out1,SF_Out1);
-        Softmax_sw(KQ_Out2,SF_Out2);
-        Softmax_sw(KQ_Out3,SF_Out3);
-        Softmax_sw(KQ_Out4,SF_Out4);
-        Softmax_sw(KQ_Out5,SF_Out5);
-        Softmax_sw(KQ_Out6,SF_Out6);
-        Softmax_sw(KQ_Out7,SF_Out7);
+        //Softmax_sw<Mat_SizeM, Mat_SizeM>
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out0,SF_Out0);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out1,SF_Out1);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out2,SF_Out2);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out3,SF_Out3);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out4,SF_Out4);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out5,SF_Out5);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out6,SF_Out6);
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out7,SF_Out7);
 
         //Multiply Value
 
@@ -45,4 +46,16 @@ void KQV_Mul(Data_t Q[Mat_SizeM][Mat_SizeK],
         Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(SF_Out6, V6, Z6);
         Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(SF_Out7, V7, Z7);
 
+}
+
+void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]){
+        Matmul<Mat_SizeM, Mat_SizeK, Mat_SizeM, Block_Size_M, Block_Size_K, Block_Size_M>(Q, K, S);
+}
+
+void Single_Softmax(Data_t S[Mat_SizeM][Mat_SizeM], Data_t S_Out[Mat_SizeM][Mat_SizeM]){
+        Softmax_sw<Mat_SizeM, Mat_SizeM>(S, S_Out);
+}
+
+void Single_V(Data_t S_Out[Mat_SizeM][Mat_SizeM], Data_t V[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]){
+        Matmul<Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(S_Out, V, Out);
 }

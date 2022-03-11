@@ -94,14 +94,14 @@ int main(){
 
     Data_t SF_Out0[Mat_SizeM][Mat_SizeM], SF_Out1[Mat_SizeM][Mat_SizeM], SF_Out2[Mat_SizeM][Mat_SizeM], SF_Out3[Mat_SizeM][Mat_SizeM], SF_Out4[Mat_SizeM][Mat_SizeM],
     SF_Out5[Mat_SizeM][Mat_SizeM], SF_Out6[Mat_SizeM][Mat_SizeM], SF_Out7[Mat_SizeM][Mat_SizeM];
-    Softmax_sw(KQ_Out0,SF_Out0);
-    Softmax_sw(KQ_Out1,SF_Out1);
-    Softmax_sw(KQ_Out2,SF_Out2);
-    Softmax_sw(KQ_Out3,SF_Out3);
-    Softmax_sw(KQ_Out4,SF_Out4);
-    Softmax_sw(KQ_Out5,SF_Out5);
-    Softmax_sw(KQ_Out6,SF_Out6);
-    Softmax_sw(KQ_Out7,SF_Out7);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out0,SF_Out0);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out1,SF_Out1);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out2,SF_Out2);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out3,SF_Out3);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out4,SF_Out4);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out5,SF_Out5);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out6,SF_Out6);
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(KQ_Out7,SF_Out7);
 
     Data_t Z0_sw[Mat_SizeM][Mat_SizeK], Z1_sw[Mat_SizeM][Mat_SizeK], Z2_sw[Mat_SizeM][Mat_SizeK], Z3_sw[Mat_SizeM][Mat_SizeK], Z4_sw[Mat_SizeM][Mat_SizeK],
     Z5_sw[Mat_SizeM][Mat_SizeK], Z6_sw[Mat_SizeM][Mat_SizeK], Z7_sw[Mat_SizeM][Mat_SizeK];
