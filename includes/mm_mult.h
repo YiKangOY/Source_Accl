@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include "hls_math.h"
 using namespace std;
 
 ////It performs M*K x K*M = M * M scheme.
@@ -13,6 +14,7 @@ const int Block_Size_M = 4;
 const int Block_Size_K = 4;
 const int Block_Size_N = 4;
 
+#define Debug 1
 
 
 typedef struct {Data_t mat[Block_Size_M][Block_Size_M];} Block_mat;
@@ -29,6 +31,7 @@ void Blockmatmul(Data_t A[b1][b2], Data_t B[b2][b3],
     //Partition in 2 dim so read one column (K elements) a time
     #pragma HLS ARRAY_PARTITION variable = ABpartial dim = 0 complete
 
+//@todo: 拆分k=0和不等于0，
     Sys1:
     for(int k = 0; k < b2; k++){
         #pragma HLS LOOP_TRIPCOUNT min = b2 max = b2
@@ -42,9 +45,11 @@ void Blockmatmul(Data_t A[b1][b2], Data_t B[b2][b3],
 
 /*                 Data_t a_val = (i < b1 && k < b2) ? A[i][k] : 0;
                 Data_t b_val = (k < b2 && j < b3) ? B[k][j] : 0; */
-                Data_t a_val = A[i][k];
-                Data_t b_val = B[k][j];
+
+                 Data_t a_val = A[i][k];
+                Data_t b_val = B[k][j]; 
                 ABpartial[i][j] = last + a_val * b_val;
+
             }
         }
     }
