@@ -12,7 +12,7 @@ const int Mat_SizeK = 256;
 const int Mat_SizeN = 8;
 
 
-void Wrapper(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], Data_t C[Mat_SizeM][Mat_SizeM]);
+void Wrapper(Data_t A[Mat_SizeM][Mat_SizeM], Data_t B[Mat_SizeM][Mat_SizeK], Data_t C[Mat_SizeM][Mat_SizeK]);
 
 template<int m1, int m2, int m3, int b1, int b2, int b3>
 void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){

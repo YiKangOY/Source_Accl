@@ -1,6 +1,5 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
-#include "../includes/KQV.h"
 #include "../includes/Softmax.h"
 #include "../includes/Top.h"
 #include <ctime>
@@ -45,7 +44,7 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
         for(int j = 0; j < dim2; j++){
         	Data_t a = A[i][j];
         	Data_t b = B[i][j];
-            if(a != b){
+            if( ((a - b) / b ) > 0.01 ){
                 cout<<"hw result: "<<a<<" sw result: "<<b<<endl;
                 fail = 1;
             }
@@ -78,9 +77,9 @@ int main(){
     //sw calculate
     Data_t S[Mat_SizeM][Mat_SizeM];
     Matmul_sw<Mat_SizeM, Mat_SizeK, Mat_SizeM>(Query, Key, S);
-    Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
-    Softmax_sw<Mat_SizeM, Mat_SizeM>(S, Softmax_out);
-    Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(Softmax_out, Value, Out_sw);
+    //Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
+    //Softmax_sw<Mat_SizeM, Mat_SizeM>(S, Softmax_out);
+    Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(S, Value, Out_sw);
 
     fail = Compare2mats<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
 

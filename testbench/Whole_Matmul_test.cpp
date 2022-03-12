@@ -16,27 +16,68 @@ void Matmul_sw(Data_t A[Mat_SizeM][Mat_SizeK], Data_t B[Mat_SizeK][Mat_SizeM], D
         }
     }
 }
+template<int dim1, int dim2>
+void Init_mat(Data_t A[dim1][dim2]){
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            A[i][j] = (Data_t) (rand() % 10) / 10;
+        }
+    }
+}
+
+template<int dim1, int dim2>
+void Init_mat0(Data_t A[dim1][dim2]){
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            A[i][j] = 0;
+        }
+    }
+}
+
+template<int dim1, int dim2, int dim3>
+void Matmul_sw(Data_t A[dim1][dim2], Data_t B[dim2][dim3], Data_t out[dim1][dim3]){
+    Data_t sum = 0;
+    for (int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim3; j++){
+            sum = 0;
+            for(int k = 0; k < dim2; k++){
+                sum = sum + A[i][k] * B[k][j];
+            }
+            out[i][j] = sum;
+        }
+    }
+}
+
+template<int dim1, int dim2>
+int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
+    int fail = 0;
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+        	Data_t a = A[i][j];
+        	Data_t b = B[i][j];
+            if(a != b){
+                cout<<"hw result: "<<a<<" sw result: "<<b<<endl;
+                fail = 1;
+            }
+        }
+    }
+    return fail;
+}
+
 
 int main(){
     int fail = 0;
-    Data_t A[Mat_SizeM][Mat_SizeK], B[Mat_SizeK][Mat_SizeM];
-    Data_t mat_sw[Mat_SizeM][Mat_SizeM], mat_hw[Mat_SizeM][Mat_SizeM];
+    Data_t A[Mat_SizeM][Mat_SizeM], B[Mat_SizeM][Mat_SizeK];
+    Data_t mat_sw[Mat_SizeM][Mat_SizeK], mat_hw[Mat_SizeM][Mat_SizeK];
     srand((unsigned)time(NULL));
     
 
 
     
-InitMatrices:
-    for (int i = 0; i< Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeM; j++){
-            mat_sw[i][j] = 0;
-            mat_hw[i][j] = 0;
-            for(int k = 0; k < Mat_SizeK; k++){
-                A[i][k] = (Data_t) (rand() % 10) / 10.0;
-                B[k][j] = (Data_t) (rand() % 10) / 10.0;
-            }
-        }
-    }
+Init_mat<Mat_SizeM, Mat_SizeM>(A);
+Init_mat<Mat_SizeM, Mat_SizeK>(B);
+Init_mat0<Mat_SizeM, Mat_SizeK>(mat_sw);
+Init_mat0<Mat_SizeM, Mat_SizeK>(mat_hw);
 
 
 
@@ -46,17 +87,9 @@ Calculate:
 
 
 Compare:
-    Matmul_sw(A, B, mat_sw);
+    Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(A, B, mat_sw);
 
-    for(int i = 0; i < Mat_SizeM; i++){
-        for(int j = 0; j < Mat_SizeM; j++){
-            if(mat_hw[i][j] != mat_sw[i][j]) {
-                fail = 1;
-                cout << "wrong idx, row: "<<i<<" col: "<< j<<endl;
-                cout<<"sw result: "<<mat_sw[i][j]<<" , hw result: "<<mat_hw[i][j] << endl;
-            }
-        }
-    }
+    fail = Compare2mats<Mat_SizeM, Mat_SizeK>(mat_hw, mat_sw);
 
     if(fail == 1){
         cout<<"Failed"<<endl;
