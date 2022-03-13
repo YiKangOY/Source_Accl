@@ -44,10 +44,12 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
         for(int j = 0; j < dim2; j++){
         	Data_t a = A[i][j];
         	Data_t b = B[i][j];
-            if( ((a - b) / b ) > 0.01 ){
-                cout<<"hw result: "<<a<<" sw result: "<<b<<endl;
+            if( ((a - b) / b ) > 0.001 ){
                 fail = 1;
             }
+            cout<<"hw result: "<<a<<" sw result: "<<b<<" "<<"Diff = "<<(a - b)/b<<endl;
+            cout<<"Idx: "<<i<<" "<<j<<endl;
+            
         }
     }
     return fail;
@@ -70,6 +72,7 @@ int main(){
     Init_mat<Mat_SizeM, Mat_SizeK>(Value);
     Init_mat0<Mat_SizeM, Mat_SizeK>(Out_hw);
     Init_mat0<Mat_SizeM, Mat_SizeK>(Out_sw);
+    
 
     //hw calculate
     Top_Single(Query, Key, Value, Out_hw);
@@ -77,9 +80,9 @@ int main(){
     //sw calculate
     Data_t S[Mat_SizeM][Mat_SizeM];
     Matmul_sw<Mat_SizeM, Mat_SizeK, Mat_SizeM>(Query, Key, S);
-    //Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
-    //Softmax_sw<Mat_SizeM, Mat_SizeM>(S, Softmax_out);
-    Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(S, Value, Out_sw);
+    Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
+    Softmax_sw<Mat_SizeM, Mat_SizeM>(S, Softmax_out);
+    Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(Softmax_out, Value, Out_sw);
 
     fail = Compare2mats<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
 

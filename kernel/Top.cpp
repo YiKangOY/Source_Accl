@@ -8,9 +8,9 @@ void Top_Single(Data_t Query[Mat_SizeM][Mat_SizeK], Data_t Key[Mat_SizeK][Mat_Si
 
     Data_t S[Mat_SizeM][Mat_SizeM] = {0};
     Single_QK(Query, Key, S);
-    //Data_t S_Out[Mat_SizeM][Mat_SizeM];
-    //Single_Softmax(S, S_Out);
-    Single_V(S, Value, Out);
+    Data_t S_Out[Mat_SizeM][Mat_SizeM];
+    Single_Softmax(S, S_Out);
+    Single_V(S_Out, Value, Out);
 }
 
 void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]){
