@@ -4,13 +4,16 @@
 #include "../includes/Top.h"
 
 void Top_Single(Data_t Query[Mat_SizeM][Mat_SizeK], Data_t Key[Mat_SizeK][Mat_SizeM], Data_t Value[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]){
-    //Copy to local
+        //Copy to local
+//        Data_t LocalQ[Mat_SizeM][Mat_SizeK], LocalK[Mat_SizeK][Mat_SizeM], LocalV[Mat_SizeM][Mat_SizeK], LocalOut[Mat_SizeM][Mat_SizeK];
+/*         for(int i = 0; i < Mat_SizeM; i++){
 
-    Data_t S[Mat_SizeM][Mat_SizeM] = {0};
-    Single_QK(Query, Key, S);
-    Data_t S_Out[Mat_SizeM][Mat_SizeM];
-    Single_Softmax(S, S_Out);
-    Single_V(S_Out, Value, Out);
+        } */
+        Data_t S[Mat_SizeM][Mat_SizeM] = {0};
+        Single_QK(Query, Key, S);
+        Data_t S_Out[Mat_SizeM][Mat_SizeM];
+        Single_Softmax(S, S_Out);
+        Single_V(S_Out, Value, Out);
 }
 
 void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]){
