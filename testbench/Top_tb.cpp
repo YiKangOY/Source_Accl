@@ -44,7 +44,7 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
         for(int j = 0; j < dim2; j++){
         	Data_t a = A[i][j];
         	Data_t b = B[i][j];
-            if( ((a - b) / b ) > 0.001 ){
+            if( abs(((a - b) / b )) > 0.001 ){
                 fail = 1;
             }
             cout<<"hw result: "<<a<<" sw result: "<<b<<" "<<"Diff = "<<(a - b)/b<<endl;
