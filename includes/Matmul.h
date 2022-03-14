@@ -7,9 +7,9 @@
 #include "mm_mult.h"
 using namespace std;
 
-const int Mat_SizeM = 8;        
-const int Mat_SizeK = 256;
-const int Mat_SizeN = 8;
+const int Mat_SizeM = 64;        
+const int Mat_SizeK = 512;
+const int Mat_SizeN = 64;
 
 
 void Wrapper(Data_t A[Mat_SizeM][Mat_SizeM], Data_t B[Mat_SizeM][Mat_SizeK], Data_t C[Mat_SizeM][Mat_SizeK]);
