@@ -22,8 +22,9 @@ SF_Findmax:
 
 SF_Reduce:
     for(int i = 0; i < dim1; i++){
+        Data_t temp_max = Max_in_row[i];
         for(int j = 0; j < dim2; j++){
-            KQ_Out[i][j] -= Max_in_row[i];
+            KQ_Out[i][j] -= temp_max;
         }
     }
 
@@ -35,8 +36,9 @@ EXP_Sum:
     }
 Exp_Out:
     for(int i = 0; i < dim1; i++){
+        Data_t temp = ExpSum[i];
         for(int j = 0; j < dim2; j++){
-            Soft_Out[i][j] = exp(KQ_Out[i][j]) / ExpSum[i];
+            Soft_Out[i][j] = exp(KQ_Out[i][j]) / temp;
         }
     }
 }

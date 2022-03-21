@@ -7,7 +7,7 @@
 #include "mm_mult.h"
 using namespace std;
 
-const int Mat_SizeM = 64;        
+const int Mat_SizeM = 16;        
 const int Mat_SizeK = 512;
 const int Mat_SizeN = 64;
 
@@ -60,8 +60,9 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
             #pragma HLS PIPELINE off
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
-			#pragma HLS LOOP_FLATTEN off
-            #pragma HLS PIPELINE off
+			//#pragma HLS LOOP_FLATTEN off
+            //#pragma HLS PIPELINE off
+            #pragma HLS UNROLL
                 //Feed A to systolic array
                 Data_t TempA [b1][b2];      
             	FeedA1:
