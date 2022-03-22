@@ -61,8 +61,8 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
 			//#pragma HLS LOOP_FLATTEN off
-            //#pragma HLS PIPELINE off
-            #pragma HLS UNROLL
+            #pragma HLS PIPELINE off
+            //#pragma HLS UNROLL
                 //Feed A to systolic array
                 Data_t TempA [b1][b2];      
             	FeedA1:
