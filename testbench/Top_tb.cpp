@@ -66,7 +66,8 @@ int main(){
 
     
     //Init matrices
-    srand((unsigned)time(NULL));
+    //srand((unsigned)time(NULL));
+    srand(5);
     Init_mat<Mat_SizeM, Mat_SizeK>(Query);
     Init_mat<Mat_SizeK, Mat_SizeM>(Key);
     Init_mat<Mat_SizeM, Mat_SizeK>(Value);
@@ -81,7 +82,7 @@ int main(){
     Data_t S[Mat_SizeM][Mat_SizeM];
     Matmul_sw<Mat_SizeM, Mat_SizeK, Mat_SizeM>(Query, Key, S);
     Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
-    Softmax_sw<Mat_SizeM, Mat_SizeM>(S, Softmax_out);
+    Softmax_sw<Data_t, Mat_SizeM, Mat_SizeM>(S, Softmax_out);
     Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(Softmax_out, Value, Out_sw);
 
     fail = Compare2mats<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
