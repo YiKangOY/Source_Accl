@@ -5,6 +5,11 @@
 
 void Top_Single(Data_t Query[Mat_SizeM][Mat_SizeK], Data_t Key[Mat_SizeK][Mat_SizeM], Data_t Value[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]){
         //Copy to local
+        #pragma HLS INTERFACE s_axilite port=return bundle=for_control
+        #pragma HLS INTERFACE m_axi port=Query offset=slave bundle=gmem0
+        #pragma HLS INTERFACE m_axi port=Key offset=slave bundle=gmem1
+        #pragma HLS INTERFACE m_axi port=Value offset=slave bundle=gmem2
+        #pragma HLS INTERFACE m_axi port=Out offset=slave bundle=gmem3
         Data_t LocalQ[Mat_SizeM][Mat_SizeK], LocalK[Mat_SizeK][Mat_SizeM], LocalV[Mat_SizeM][Mat_SizeK];
         Data_t LocalOut[Mat_SizeM][Mat_SizeK] = {0};
         for(int i = 0; i < Mat_SizeM; i++){

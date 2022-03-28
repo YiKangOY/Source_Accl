@@ -7,10 +7,10 @@ using namespace std;
 
 ////It performs M*K x K*M = M * M scheme.
 
-typedef half  Data_t;
+typedef half Data_t;
 //Blocksize follows M*K x K*M = M * M scheme
 const int Block_Size_M = 4;
-const int Block_Size_K = 16;
+const int Block_Size_K = 4;
 const int Block_Size_N = 4;
 
 
