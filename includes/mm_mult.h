@@ -1,17 +1,16 @@
 #ifndef _MM_MULT_H_
 #define _MM_MULT_H_
 #include <hls_stream.h>
-#include <iostream>
-#include <iomanip>
-#include <vector>
 #include "hls_math.h"
+#include <ap_fixed.h>
 using namespace std;
 
 ////It performs M*K x K*M = M * M scheme.
-typedef float Data_t;
+
+typedef half  Data_t;
 //Blocksize follows M*K x K*M = M * M scheme
 const int Block_Size_M = 4;
-const int Block_Size_K = 4;
+const int Block_Size_K = 16;
 const int Block_Size_N = 4;
 
 
@@ -47,10 +46,10 @@ void Blockmatmul(hls::stream<T> A[b1][b2], hls::stream<T> B[b2][b3],
             Sys3:
             for(int j = 0; j < b3; j++){
                // #pragma HLS UNROLL
-                T last =  k==0? 0 : LocalAB[i][j];
+                T last =  k==0 ? (Data_t) 0 : LocalAB[i][j];
 
-                T a_val = (i < b1 && k < b2) ? LocalA[i][k] : 0;
-                T b_val = (k < b2 && j < b3) ? LocalB[k][j] : 0;
+                T a_val = (i < b1 && k < b2) ? LocalA[i][k] : (Data_t)0;
+                T b_val = (k < b2 && j < b3) ? LocalB[k][j] : (Data_t)0;
 
 /*                 Data_t a_val = A[i][k];
                 Data_t b_val = B[k][j];  */

@@ -37,14 +37,14 @@ SF_Reduce:
 EXP_Sum:
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            ExpSum[i]+=exp(LocalKQ[i][j]);
+            ExpSum[i]+=hls::exp(LocalKQ[i][j]);
         }
     }
 Exp_Out:
     for(int i = 0; i < dim1; i++){
         T temp = ExpSum[i];
         for(int j = 0; j < dim2; j++){
-            Local_SF[i][j] = exp(LocalKQ[i][j]) / temp;
+            Local_SF[i][j] = hls::exp(LocalKQ[i][j]) / temp;
         }
     }
 
@@ -82,14 +82,14 @@ SF_Reduce:
 EXP_Sum:
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            ExpSum[i]+=exp(KQ_Out[i][j]);
+            ExpSum[i]+=hls::exp(KQ_Out[i][j]);
         }
     }
 Exp_Out:
     for(int i = 0; i < dim1; i++){
         T temp = ExpSum[i];
         for(int j = 0; j < dim2; j++){
-            Soft_Out[i][j] = exp(KQ_Out[i][j]) / temp;
+            Soft_Out[i][j] =hls::exp(KQ_Out[i][j]) / temp;
         }
     }
 

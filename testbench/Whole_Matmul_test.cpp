@@ -1,6 +1,5 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
-#include <stdlib.h>
 #include <ctime>
 using namespace std;
 

@@ -3,8 +3,7 @@
 #include "../includes/Softmax.h"
 #include "../includes/Top.h"
 #include <ctime>
-#include <stdlib.h>
-using namespace std;
+#include <iostream>
 
 template<int dim1, int dim2, int dim3>
 void Matmul_sw(Data_t A[dim1][dim2], Data_t B[dim2][dim3], Data_t out[dim1][dim3]){
@@ -44,11 +43,11 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
         for(int j = 0; j < dim2; j++){
         	Data_t a = A[i][j];
         	Data_t b = B[i][j];
-            if( abs(((a - b) / b )) > 0.001 ){
+            if( hls::abs(((a - b) / b )) > 0.001 ){
                 fail = 1;
             }
-            cout<<"hw result: "<<a<<" sw result: "<<b<<" "<<"Diff = "<<(a - b)/b<<endl;
-            cout<<"Idx: "<<i<<" "<<j<<endl;
+            std::cout<<"hw result: "<<a<<" sw result: "<<b<<" "<<"Diff = "<<(a - b)/b<<std::endl;
+            std::cout<<"Idx: "<<i<<" "<<j<<std::endl;
             
         }
     }
@@ -67,7 +66,7 @@ int main(){
     
     //Init matrices
     //srand((unsigned)time(NULL));
-    srand(5);
+    srand(6);
     Init_mat<Mat_SizeM, Mat_SizeK>(Query);
     Init_mat<Mat_SizeK, Mat_SizeM>(Key);
     Init_mat<Mat_SizeM, Mat_SizeK>(Value);

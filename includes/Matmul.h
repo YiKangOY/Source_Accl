@@ -1,13 +1,10 @@
 #ifndef _MATMUL_H
 #define _MATMUL_H
 #include <hls_stream.h>
-#include <iostream>
-#include <iomanip>
-#include <vector>
 #include "mm_mult.h"
 using namespace std;
 
-const int Mat_SizeM = 16;        
+const int Mat_SizeM = 64;        
 const int Mat_SizeK = 512;
 const int Mat_SizeN = 64;
 

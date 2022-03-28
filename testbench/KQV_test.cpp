@@ -1,8 +1,6 @@
 #include "../includes/mm_mult.h"
 #include "../includes/Matmul.h"
-#include "../includes/KQV.h"
 #include "../includes/Softmax.h"
-#include <stdlib.h>
 using namespace std;
 
 template<int dim1, int dim2, int dim3>
