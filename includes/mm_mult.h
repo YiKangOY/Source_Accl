@@ -19,7 +19,7 @@ typedef struct {Data_t mat[Block_Size_M][Block_Size_M];} Block_mat;
 template<typename T, int b1, int b2, int b3>
 void Blockmatmul(hls::stream<T> A[b1][b2], hls::stream<T> B[b2][b3],
                     hls::stream<T> ABpartial[b1][b3]){
-
+    #pragma HLS DATAFLOW
     T LocalA[b1][b2], LocalB[b2][b3], LocalAB[b1][b3];
     #pragma HLS ARRAY_PARTITION variable = LocalA dim = 1 complete
     //Partition in 1 dim so read one row (K elements) a time

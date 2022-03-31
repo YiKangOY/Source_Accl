@@ -14,10 +14,6 @@ void Wrapper(Data_t A[Mat_SizeM][Mat_SizeM], Data_t B[Mat_SizeM][Mat_SizeK], Dat
 template<typename T, int m1, int m2, int m3, int b1, int b2, int b3>
 void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
 
-    hls::stream<T> Block_out[b1][b3];
-
-
-    
     //Call systolic array in a tiled shceme
     LpC_it1:
     for(int it1 = 0; it1 < m1; it1 = it1 + b1){
@@ -27,7 +23,8 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
             #pragma HLS PIPELINE off
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
-            #pragma HLS DATAFLOW
+            #pragma HLS UNROLL factor = 8
+                hls::stream<T> Block_out[b1][b3];
                 //Feed A to systolic array
                 hls::stream<T> TempA [b1][b2];      
             	FeedA1:
@@ -57,6 +54,7 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
                         C[it1 + i][it2 + j] += Block_out[i][j].read();
                     }
                 }
+
             }
         }
     }
