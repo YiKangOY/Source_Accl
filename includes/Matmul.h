@@ -44,9 +44,11 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
         for(int it2 = 0; it2 < m3; it2 = it2 + b3){
         //@todo: add it later, may cause syth slow #pragma HLS UNROLL
             //it1 and it2 are used to locate target output in C matrix
+            //#pragma HLS UNROLL factor=2
             #pragma HLS PIPELINE off
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
+
             //#pragma HLS PIPELINE off
             #pragma HLS DATAFLOW
                 //Feed A to systolic array
