@@ -14,42 +14,19 @@ void Wrapper(Data_t A[Mat_SizeM][Mat_SizeM], Data_t B[Mat_SizeM][Mat_SizeK], Dat
 template<typename T, int m1, int m2, int m3, int b1, int b2, int b3>
 void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
 
-    //Local variables
-    T LocalA[m1][m2], LocalB[m2][m3];
-    T LocalC[m1][m3]={0};
-/*     #pragma HLS ARRAY_PARTITION variable = A dim = 1 complete
-    #pragma HLS ARRAY_PARTITION variable = B dim = 2 complete
-    #pragma HLS ARRAY_PARTITION variable = C dim = 0 complete */
     hls::stream<T> Block_out[b1][b3];
 
-    //Read to local
-/*     for(int i = 0; i < m2; i++){
-        for(int j = 0; j < m1; j++){
-            LocalA[j][i] = A[j][i].read();
-        }
-    }
 
-    for(int i = 0; i < m2; i++){
-        for(int j = 0; j < m3; j++){
-            LocalB[i][j] = B[i][j].read();
-        }
-    } */
     
     //Call systolic array in a tiled shceme
     LpC_it1:
     for(int it1 = 0; it1 < m1; it1 = it1 + b1){
-        //@todo: add it later, may cause syth slow #pragma HLS UNROLL
         #pragma HLS PIPELINE off
     	LpC_it2:
         for(int it2 = 0; it2 < m3; it2 = it2 + b3){
-        //@todo: add it later, may cause syth slow #pragma HLS UNROLL
-            //it1 and it2 are used to locate target output in C matrix
-            //#pragma HLS UNROLL factor=2
             #pragma HLS PIPELINE off
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
-
-            //#pragma HLS PIPELINE off
             #pragma HLS DATAFLOW
                 //Feed A to systolic array
                 hls::stream<T> TempA [b1][b2];      
@@ -85,13 +62,7 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
     }
     //Systolic array finish
 
-/*     Wout1:
-    for(int i = 0; i < m1; i++){
-    	Wout2:
-        for(int j = 0; j < m3; j++){
-            C[i][j].write(LocalC[i][j]);
-        }
-    } */
+
 
 } 
 
