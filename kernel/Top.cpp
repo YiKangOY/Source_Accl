@@ -44,7 +44,7 @@ void Top_Single(Data_t Query[Mat_SizeM][Mat_SizeK], Data_t Key[Mat_SizeK][Mat_Si
 }
 
 void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], Data_t S[Mat_SizeM][Mat_SizeM]){
-        Matmul<Data_t, Mat_SizeM, Mat_SizeK, Mat_SizeM, Block_Size_M, Block_Size_K, Block_Size_M>(Q, K, S);
+        Matmul<Data_t, Mat_SizeM, Mat_SizeK, Mat_SizeM, 4, 4, 4>(Q, K, S);
 }
 
 void Single_Softmax(Data_t S[Mat_SizeM][Mat_SizeM], Data_t S_Out[Mat_SizeM][Mat_SizeM]){
@@ -52,5 +52,5 @@ void Single_Softmax(Data_t S[Mat_SizeM][Mat_SizeM], Data_t S_Out[Mat_SizeM][Mat_
 }
 
 void Single_V(Data_t S_Out[Mat_SizeM][Mat_SizeM], Data_t V[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]){
-        Matmul<Data_t, Mat_SizeM, Mat_SizeM, Mat_SizeK, Block_Size_M, Block_Size_M, Block_Size_K>(S_Out, V, Out);
+        Matmul<Data_t, Mat_SizeM, Mat_SizeM, Mat_SizeK, 4, 4, 4>(S_Out, V, Out);
 }

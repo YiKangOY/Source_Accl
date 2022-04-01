@@ -21,9 +21,10 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
     	LpC_it2:
         for(int it2 = 0; it2 < m3; it2 = it2 + b3){
             #pragma HLS PIPELINE off
+            //#pragma HLS UNROLL factor = 2
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
-            #pragma HLS UNROLL factor = 8
+            //#pragma HLS UNROLL factor = 4
                 hls::stream<T> Block_out[b1][b3];
                 //Feed A to systolic array
                 hls::stream<T> TempA [b1][b2];      
