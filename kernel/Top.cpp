@@ -43,7 +43,7 @@ void Single_QK(Data_t Q[Mat_SizeM][Mat_SizeK], Data_t K[Mat_SizeK][Mat_SizeM], D
 }
 
 void Single_Softmax(Data_t S[Mat_SizeM][Mat_SizeM], Data_t S_Out[Mat_SizeM][Mat_SizeM]){
-        Softmax_sw<Mat_SizeM, Mat_SizeM>(S, S_Out);
+        Softmax_OG<Mat_SizeM, Mat_SizeM>(S, S_Out);
 }
 
 void Single_V(Data_t S_Out[Mat_SizeM][Mat_SizeM], Data_t V[Mat_SizeM][Mat_SizeK], Data_t Out[Mat_SizeM][Mat_SizeK]){

@@ -42,4 +42,26 @@ Exp_Out:
         }
     }
 }
+
+template<int dim1, int dim2>
+void Softmax_OG(Data_t KQ_Out[dim1][dim2], Data_t Soft_Out[dim1][dim2]){
+    Data_t ExpSum[dim1] = {0};
+    Data_t Max_in_row[dim1] = {0};
+    Data_t Exp_Res[dim1][dim2];
+
+EXP_Sum:
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            ExpSum[i]+=hls::exp(KQ_Out[i][j]);
+        }
+    }
+    
+Exp_Out:
+    for(int i = 0; i < dim1; i++){
+        Data_t temp = ExpSum[i];
+        for(int j = 0; j < dim2; j++){
+            Soft_Out[i][j] = hls::exp(KQ_Out[i][j]) / temp;
+        }
+    }
+}
 #endif
