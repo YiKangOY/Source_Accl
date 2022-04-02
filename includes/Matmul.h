@@ -1,13 +1,10 @@
 #ifndef _MATMUL_H
 #define _MATMUL_H
 #include <hls_stream.h>
-#include <iostream>
-#include <iomanip>
-#include <vector>
 #include "mm_mult.h"
 using namespace std;
 
-const int Mat_SizeM = 16;        
+const int Mat_SizeM = 64;        
 const int Mat_SizeK = 512;
 const int Mat_SizeN = 64;
 
@@ -18,36 +15,10 @@ template<int m1, int m2, int m3, int b1, int b2, int b3>
 void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
 
     //Local variables
-//    Data_t LocalA[m1][m2], LocalB[m2][m3], LocalC[m1][m3];
-/*     #pragma HLS ARRAY_PARTITION variable = A dim = 1 complete
-    #pragma HLS ARRAY_PARTITION variable = B dim = 2 complete
-    #pragma HLS ARRAY_PARTITION variable = C dim = 0 complete */
+
     Data_t Block_out[b1][b3];
 
-    //Read to local
-/*     for(int i = 0; i < m2; i++){
-        for(int j = 0; j < m1; j++){
-            LocalA[j][i] = A[j][i];
-        }
-    }
 
-    for(int i = 0; i < m2; i++){
-        for(int j = 0; j < m3; j++){
-            LocalB[i][j] = B[i][j];
-        }
-    }
-
-    for(int i = 0; i < m1; i++){
-        for(int j = 0; j < m3; j++){
-            LocalC[i][j] = 0;
-        }
-    } */
-    
-
-
-/*     #pragma HLS ARRAY_PARTITION variable = TempA dim = 1 complete
-    #pragma HLS ARRAY_PARTITION variable = TempB dim = 1 complete */
-    
     //Call systolic array in a tiled shceme
     LpC_it1:
     for(int it1 = 0; it1 < m1; it1 = it1 + b1){
@@ -97,14 +68,6 @@ void Matmul(Data_t A[m1][m2], Data_t B[m2][m3], Data_t C[m1][m3]){
     }
     //Systolic array finish
 
-/*     Wout1:
-    for(int i = 0; i < m1; i++){
-    	Wout2:
-        for(int j = 0; j < m3; j++){
-            C[i][j] = LocalC[i][j];
-        }
-    }
-*/
 } 
 
 

@@ -31,14 +31,14 @@ SF_Reduce:
 EXP_Sum:
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            ExpSum[i]+=exp(KQ_Out[i][j]);
+            ExpSum[i]+=hls::exp(KQ_Out[i][j]);
         }
     }
 Exp_Out:
     for(int i = 0; i < dim1; i++){
         Data_t temp = ExpSum[i];
         for(int j = 0; j < dim2; j++){
-            Soft_Out[i][j] = exp(KQ_Out[i][j]) / temp;
+            Soft_Out[i][j] = hls::exp(KQ_Out[i][j]) / temp;
         }
     }
 }
