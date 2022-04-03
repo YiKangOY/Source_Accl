@@ -54,7 +54,32 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
     return fail;
 }
 
-int main(){
+template<int dim1, int dim2>
+int Correctness(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
+    int fail = 0;
+    for(int i = 0; i < dim1; i++){
+        Data_t max1=(Data_t)0;
+        Data_t max2=(Data_t)0;
+        int idx1=0;
+        int idx2=0;
+        for(int j = 0; j < dim2; j++){
+            if(A[i][j]>max1){
+                max1 = A[i][j];
+                idx1 = j;
+            }
+            if(B[i][j]>max2){
+                max2 = B[i][j];
+                idx2 = j;
+            }
+        }
+        if(idx1!=idx2){
+            fail++;
+        }
+    }
+    return fail;
+}
+
+int One_Test(int idx){
     int fail = 0;
     Data_t Query[Mat_SizeM][Mat_SizeK];
     Data_t Key[Mat_SizeK][Mat_SizeM];
@@ -66,7 +91,7 @@ int main(){
     
     //Init matrices
     //srand((unsigned)time(NULL));
-    srand(6);
+    srand(idx);
     Init_mat<Mat_SizeM, Mat_SizeK>(Query);
     Init_mat<Mat_SizeK, Mat_SizeM>(Key);
     Init_mat<Mat_SizeM, Mat_SizeK>(Value);
@@ -84,12 +109,24 @@ int main(){
     Softmax_sw<Data_t, Mat_SizeM, Mat_SizeM>(S, Softmax_out);
     Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(Softmax_out, Value, Out_sw);
 
-    fail = Compare2mats<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
+    fail = Correctness<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
 
-    if(!fail){ cout<< "PASS!";}
+    //if(!fail){ cout<< "PASS!";}
+    //else{cout<<fail;}
     return fail;
+}
 
-    
+int main(){
+   
+int all_fail=0;
+for(int i = 0; i < 1; i++){
+    int temp = 0;
+    temp=One_Test(i*123);
+    all_fail+=temp;
+}
+cout<<"wrong rate: "<<all_fail<<endl;
+
+return 0;
 
 
 }

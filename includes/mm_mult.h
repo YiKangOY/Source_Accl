@@ -20,7 +20,8 @@ template<typename T, int b1, int b2, int b3>
 void Blockmatmul(hls::stream<T> A[b1][b2], hls::stream<T> B[b2][b3],
                     hls::stream<T> ABpartial[b1][b3]){
     #pragma HLS DATAFLOW
-    T LocalA[b1][b2], LocalB[b2][b3], LocalAB[b1][b3];
+    T LocalA[b1][b2], LocalB[b2][b3];
+    T LocalAB[b1][b3]={0};
     #pragma HLS ARRAY_PARTITION variable = LocalA dim = 1 complete
     //Partition in 1 dim so read one row (K elements) a time
     #pragma HLS ARRAY_PARTITION variable = LocalB dim = 2 complete
@@ -46,12 +47,14 @@ void Blockmatmul(hls::stream<T> A[b1][b2], hls::stream<T> B[b2][b3],
             Sys3:
             for(int j = 0; j < b3; j++){
                 #pragma HLS UNROLL
-                T last =  k==0 ? (Data_t) 0 : LocalAB[i][j];
+/*                 T last =  k==0 ? (Data_t) 0 : LocalAB[i][j];
 
                 T a_val = (i < b1 && k < b2) ? LocalA[i][k] : (Data_t)0;
                 T b_val = (k < b2 && j < b3) ? LocalB[k][j] : (Data_t)0;
-
-                LocalAB[i][j] = last + a_val * b_val;
+ */
+                T a_val = LocalA[i][k];
+                T b_val = LocalB[k][j];
+                LocalAB[i][j] +=  a_val * b_val;
 
             }
         }

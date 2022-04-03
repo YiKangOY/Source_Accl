@@ -2,6 +2,7 @@
 #define _MATMUL_H
 #include <hls_stream.h>
 #include "mm_mult.h"
+#include "hls_math.h"
 using namespace std;
 
 const int Mat_SizeM = 64;        
@@ -24,7 +25,8 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
             //#pragma HLS UNROLL factor = 2
         	LpC_loc:
             for(int loc = 0; loc < m2; loc = loc + b2){
-            //#pragma HLS UNROLL factor = 4
+            #pragma HLS UNROLL factor = 4 
+            //#pragma HLS PIPELINE
                 hls::stream<T> Block_out[b1][b3];
                 //Feed A to systolic array
                 hls::stream<T> TempA [b1][b2];      
@@ -59,9 +61,6 @@ void Matmul(T A[m1][m2], T B[m2][m3], T C[m1][m3]){
             }
         }
     }
-    //Systolic array finish
-
-
 
 } 
 
