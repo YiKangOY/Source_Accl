@@ -6,8 +6,8 @@
 #include <iostream>
 
 template<int dim1, int dim2, int dim3>
-void Matmul_sw(Data_t A[dim1][dim2], Data_t B[dim2][dim3], Data_t out[dim1][dim3]){
-    Data_t sum = 0;
+void Matmul_sw(float A[dim1][dim2], float B[dim2][dim3], float out[dim1][dim3]){
+    float sum = 0;
     for (int i = 0; i < dim1; i++){
         for(int j = 0; j < dim3; j++){
             sum = 0;
@@ -19,16 +19,16 @@ void Matmul_sw(Data_t A[dim1][dim2], Data_t B[dim2][dim3], Data_t out[dim1][dim3
     }
 }
 template<int dim1, int dim2>
-void Init_mat(Data_t A[dim1][dim2]){
+void Init_mat(float A[dim1][dim2]){
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-            A[i][j] = (Data_t) (rand() % 10) / 10;
+            A[i][j] = (float) (rand() % 10) / 10;
         }
     }
 }
 
 template<int dim1, int dim2>
-void Init_mat0(Data_t A[dim1][dim2]){
+void Init_mat0(float A[dim1][dim2]){
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
             A[i][j] = 0;
@@ -37,12 +37,12 @@ void Init_mat0(Data_t A[dim1][dim2]){
 }
 
 template<int dim1, int dim2>
-int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
+int Compare2mats(float A[dim1][dim2], float B[dim1][dim2]){
     int fail = 0;
     for(int i = 0; i < dim1; i++){
         for(int j = 0; j < dim2; j++){
-        	Data_t a = A[i][j];
-        	Data_t b = B[i][j];
+        	float a = A[i][j];
+        	float b = B[i][j];
             if( hls::abs(((a - b) / b )) > 0.001 ){
                 fail = 1;
             }
@@ -55,11 +55,11 @@ int Compare2mats(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
 }
 
 template<int dim1, int dim2>
-int Correctness(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
+int Correctness(float A[dim1][dim2], float B[dim1][dim2]){
     int fail = 0;
     for(int i = 0; i < dim1; i++){
-        Data_t max1=(Data_t)0;
-        Data_t max2=(Data_t)0;
+        float max1=(float)-9999;
+        float max2=(float)-9999;
         int idx1=0;
         int idx2=0;
         for(int j = 0; j < dim2; j++){
@@ -79,34 +79,75 @@ int Correctness(Data_t A[dim1][dim2], Data_t B[dim1][dim2]){
     return fail;
 }
 
+template<int dim1, int dim2>
+void Init_1d_mat(float * A){
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            A[i*dim2 + j] = static_cast<float> ((rand() % 10) / 10);
+        }
+    }
+}
+
+template<int dim1, int dim2>
+void Init_1d_mat_0(float * A){
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            A[i*dim2 + j] = static_cast<float>(0) ;
+        }
+    }
+}
+
+template<int dim1, int dim2>
+void Mat_1D_to_2D(float *A, float B[dim1][dim2]){
+    for(int i = 0; i < dim1; i++){
+        for(int j = 0; j < dim2; j++){
+            B[i][j] = A[i * dim2 + j];
+        }
+    }
+}
 int One_Test(int idx){
     int fail = 0;
-    Data_t Query[Mat_SizeM][Mat_SizeK];
-    Data_t Key[Mat_SizeK][Mat_SizeM];
-    Data_t Value[Mat_SizeM][Mat_SizeK];
+    srand(idx);
+    //1d array
+    float Q_1d[Mat_SizeM * Mat_SizeK];
+    float K_1d[Mat_SizeK * Mat_SizeM];
+    float V_1d[Mat_SizeM * Mat_SizeK];
+    float O_1d[Mat_SizeM * Mat_SizeK];
 
-    Data_t Out_hw[Mat_SizeM][Mat_SizeK];
-    Data_t Out_sw[Mat_SizeM][Mat_SizeK];
+    float *P_Q=Q_1d;
+    float *P_K=K_1d;
+    float *P_V=V_1d;
+    float *P_O=O_1d;
+
+    Init_1d_mat<Mat_SizeM, Mat_SizeK>(P_Q);
+    Init_1d_mat<Mat_SizeK, Mat_SizeM>(P_K);
+    Init_1d_mat<Mat_SizeM, Mat_SizeK>(P_V);
+    Init_1d_mat_0<Mat_SizeM, Mat_SizeK>(P_O);
+
+    float Query[Mat_SizeM][Mat_SizeK];
+    float Key[Mat_SizeK][Mat_SizeM];
+    float Value[Mat_SizeM][Mat_SizeK];
+
+    float Out_hw[Mat_SizeM][Mat_SizeK];
+    float Out_sw[Mat_SizeM][Mat_SizeK];
 
     
     //Init matrices
-    //srand((unsigned)time(NULL));
-    srand(idx);
-    Init_mat<Mat_SizeM, Mat_SizeK>(Query);
-    Init_mat<Mat_SizeK, Mat_SizeM>(Key);
-    Init_mat<Mat_SizeM, Mat_SizeK>(Value);
-    Init_mat0<Mat_SizeM, Mat_SizeK>(Out_hw);
-    Init_mat0<Mat_SizeM, Mat_SizeK>(Out_sw);
+    Mat_1D_to_2D<Mat_SizeM, Mat_SizeK>(P_Q, Query);
+    Mat_1D_to_2D<Mat_SizeK, Mat_SizeM>(P_K, Key);
+    Mat_1D_to_2D<Mat_SizeM, Mat_SizeK>(P_V, Value);
+    Mat_1D_to_2D<Mat_SizeM, Mat_SizeK>(P_O, Out_hw);
+    Mat_1D_to_2D<Mat_SizeM, Mat_SizeK>(P_O, Out_sw);
     
 
     //hw calculate
-    Top_Single(Query, Key, Value, Out_hw);
-
+    Top(P_Q, P_K, P_V, P_O);
+    Mat_1D_to_2D<Mat_SizeM, Mat_SizeK>(P_O, Out_hw);
     //sw calculate
-    Data_t S[Mat_SizeM][Mat_SizeM];
+    float S[Mat_SizeM][Mat_SizeM];
     Matmul_sw<Mat_SizeM, Mat_SizeK, Mat_SizeM>(Query, Key, S);
-    Data_t Softmax_out[Mat_SizeM][Mat_SizeM];
-    Softmax_sw<Data_t, Mat_SizeM, Mat_SizeM>(S, Softmax_out);
+    float Softmax_out[Mat_SizeM][Mat_SizeM];
+    Softmax_sw<float, Mat_SizeM, Mat_SizeM>(S, Softmax_out);
     Matmul_sw<Mat_SizeM, Mat_SizeM, Mat_SizeK>(Softmax_out, Value, Out_sw);
 
     fail = Correctness<Mat_SizeM, Mat_SizeK>(Out_hw, Out_sw);
@@ -121,12 +162,12 @@ int main(){
 int all_fail=0;
 for(int i = 0; i < 1; i++){
     int temp = 0;
-    temp=One_Test(i*123);
+    temp=One_Test(i+123);
     all_fail+=temp;
 }
 cout<<"wrong rate: "<<all_fail<<endl;
 
-return 0;
+return all_fail;
 
 
 }
